@@ -1,18 +1,18 @@
  -- 1. Show the total titles available in the library.
 
-select distinct title from book_detail ;
+select title from book_detail ;
 
 -- 2. Show the titles with highest number of copies.
 
-with number_of_copies as 
+with number_of_copies as
 (select count(*),title from book_detail b
   join book_copy c on b.isbn=c.isbn group by title order by count(*) desc)
 select title from number_of_copies where count=(select max(count) from number_of_copies);
 
 -- 3. Show the titles with five or less copies.
 
-with number_of_copies as 
-(select count(*),title from book_detail b 
+with number_of_copies as
+(select count(*),title from book_detail b
  join book_copy c on b.isbn=c.isbn group by title order by count(*) desc)
 select title from number_of_copies where count<=5;
 
@@ -25,7 +25,7 @@ select * from book_detail where isbn = (select isbn from book_copy join s on boo
 
 -- 5. Show the titles not borrowed for more than four months as of current date.
 
-with isbn_of_selected_book as 
+with isbn_of_selected_book as
 (select bc.isbn from book_copy bc right join borrower br on bc.id = br.book_id where return_date <= current_date - interval '4 months' and bc.availablity=true)
 select bd.title from isbn_of_selected_book iosb join  book_detail bd on iosb.isbn=bd.isbn;
 
@@ -35,9 +35,9 @@ select title from (select count(*),title from book_detail b
   join book_copy c on b.isbn=c.isbn group by title order by count(*)) as c2 where count>10
 intersect
 select title from book_detail b
-except (select title from book_detail b1 
+except (select title from book_detail b1
 	join (select isbn from book_copy b
-  join borrower c on b.id=c.book_id where c.issue_date>=current_date-interval '3 months') as i on 
+  join borrower c on b.id=c.book_id where c.issue_date>=current_date-interval '3 months') as i on
   b1.isbn = i.isbn);
 
 -- 7. Show the library user who borrowed the maximum books in a given period. (Eg: Jan 2018)
@@ -54,17 +54,17 @@ select concat(first_name,' ',last_name) from count_of_borrower where count=(sele
 
 -- 8. Show the library user(s) who are in possession of a library book for more than 15 days.
 
-select concat(ud.first_name,' ',ud.last_name) 
+select concat(ud.first_name,' ',ud.last_name)
 from borrower br join user_detail ud  on br.user_id= ud.user_id
 where issue_date <= current_date - interval '15 days' and return_date is null;
 
 -- 9. Show the library user(s) who are in possession of more than two library books and holding atleast two of them for more then 15 days.
--- i have created view for borrower and book count 
+-- i have created view for borrower and book count
 create view borrower_with_book_count
 (select count(*),user_id from borrower group by user_id);
 
-select distinct concat(ud.first_name,' ',ud.last_name) 
-from borrower br join user_detail ud on br.user_id=ud.user_id 
+select distinct concat(ud.first_name,' ',ud.last_name)
+from borrower br join user_detail ud on br.user_id=ud.user_id
 where br.user_id=(select user_id from borrower_with_book_count where count>2) and
 issue_date <= current_date - interval '5 days' and return_date is null;
 
@@ -75,17 +75,13 @@ issue_date <= current_date - interval '5 days' and return_date is null;
 
 -- 11. Show the library users who returned books in 7 days time in a given period.
 
-select concat(ud.first_name,' ',ud.last_name)from borrower br 
-join user_detail ud on br.user_id=ud.user_id 
+select concat(ud.first_name,' ',ud.last_name)from borrower br
+join user_detail ud on br.user_id=ud.user_id
 where br.return_date= br.issue_date + interval '7 days';
 
 -- 12. Show the average period of holding the borrowed books that were returned in a certain period. (Eg: Jan 2018).
 
 --- for month feb 2018
 
-select avg(br.return_date-br.issue_date) from borrower br 
+select avg(br.return_date-br.issue_date) from borrower br
 where br.return_date is not null and to_char(br.return_date,'MM-YYYY')= '02-2018';
-
-
-
-
