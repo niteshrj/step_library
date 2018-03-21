@@ -1,5 +1,9 @@
 SET search_path TO library;
 --
-\COPY book_detail from '/Users/niteshr/Downloads/book_detail.txt' with delimiter '$';
-\COPY user_detail from '/Users/niteshr/Downloads/user_detail.txt' with delimiter '$';
-\COPY book_copy from '/Users/niteshr/Downloads/book_copy.txt' with delimiter '$';
+
+\set pwd '\'':p'/book_detail.txt\''
+\COPY book_detail from :pwd with delimiter '$';
+\set pwd '\'':p'/user_detail.txt\''
+\COPY user_detail from :pwd with delimiter '$';
+\set pwd '\'':p'/book_copy.txt\''
+\COPY book_copy from :pwd with delimiter '$';
