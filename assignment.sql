@@ -1,6 +1,6 @@
  -- 1. Show the total titles available in the library.
 
-select  title from book_detail ;
+select distinct title from book_detail ;
 
 -- 2. Show the titles with highest number of copies.
 
@@ -19,7 +19,7 @@ select title from number_of_copies where count<=5;
 
 
 -- 4. Show the titles borrowed the most in a given month. (Eg: Sep 2017)
--- incomplete
+--- for month feb 2018
 with s as (select book_id,count(book_id) from borrower where issue_date between '02/01/2018' and '02/28/2018' group by book_id order by count desc limit 1)
 select * from book_detail where isbn = (select isbn from book_copy join s on book_copy.id = s.book_id);
 
@@ -58,12 +58,34 @@ select concat(ud.first_name,' ',ud.last_name)
 from borrower br join user_detail ud  on br.user_id= ud.user_id
 where issue_date <= current_date - interval '15 days' and return_date is null;
 
-
-
 -- 9. Show the library user(s) who are in possession of more than two library books and holding atleast two of them for more then 15 days.
+-- i have created view for borrower and book count 
+create view borrower_with_book_count
+(select count(*),user_id from borrower group by user_id);
+
+select distinct concat(ud.first_name,' ',ud.last_name) 
+from borrower br join user_detail ud on br.user_id=ud.user_id 
+where br.user_id=(select user_id from borrower_with_book_count where count>2) and
+issue_date <= current_date - interval '5 days' and return_date is null;
+
 
 -- 10. Show the titles that are in high demand and copies not available.
 
+
+
 -- 11. Show the library users who returned books in 7 days time in a given period.
 
+select concat(ud.first_name,' ',ud.last_name)from borrower br 
+join user_detail ud on br.user_id=ud.user_id 
+where br.return_date= br.issue_date + interval '7 days';
+
 -- 12. Show the average period of holding the borrowed books that were returned in a certain period. (Eg: Jan 2018).
+
+--- for month feb 2018
+
+select avg(br.return_date-br.issue_date) from borrower br 
+where br.return_date is not null and to_char(br.return_date,'MM-YYYY')= '02-2018';
+
+
+
+
