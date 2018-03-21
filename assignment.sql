@@ -71,6 +71,14 @@ issue_date <= current_date - interval '5 days' and return_date is null;
 
 -- 10. Show the titles that are in high demand and copies not available.
 
+select title from book_detail bd join
+((select b1.isbn from book_copy b1
+join (select distinct isbn from book_copy b
+	join borrower bor on bor.book_id = b.id) as isbns on isbns.isbn=b1.isbn order by isbn)
+intersect
+(select distinct isbn from book_copy where availablity=false
+except
+select distinct isbn from book_copy where availablity=true))as bb on bb.isbn=bd.isbn;
 
 
 -- 11. Show the library users who returned books in 7 days time in a given period.
