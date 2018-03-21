@@ -1,6 +1,6 @@
 SET search_path TO library;
 
---run this script
+--run this script for heroku
 --heroku pg:psql --app dbone < /Users/niteshr/projects/step_library/insert.sql
 --
 \set pwd '\'':p'/book_detail.txt\''
