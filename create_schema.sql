@@ -42,8 +42,7 @@ create table book_detail (
 	isbn VARCHAR(20),
 	title VARCHAR(50),
 	author_name VARCHAR(50),
-	publisher VARCHAR(50),
-	book_count INT
+	publisher VARCHAR(50)
 );
 
 SELECT * FROM book_detail;
