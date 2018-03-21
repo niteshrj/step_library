@@ -99,7 +99,7 @@ CREATE TABLE borrower(
 
 ALTER TABLE borrower
 ADD CONSTRAINT fk_user_id
-FOREIGN KEY (id)
+FOREIGN KEY (user_id)
 REFERENCES user_detail(user_id);
 
 -- Foreign key for book
