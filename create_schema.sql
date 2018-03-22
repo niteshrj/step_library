@@ -116,5 +116,4 @@ ALTER COLUMN issue_date SET NOT NULL;
 
 -- add  check constraints(return date should be less than issue date)
 ALTER TABLE borrower
-ADD CONSTRAINT valid_return_date CHECK (return_date>=issue_date); 
-
+ADD CONSTRAINT valid_return_date CHECK (return_date>=issue_date);
