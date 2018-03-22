@@ -4,19 +4,11 @@ select title from book_detail ;
 
 -- 2. Show the titles with highest number of copies.
 
-with number_of_copies as
-(select count(*),title from book_detail b
-  join book_copy c on b.isbn=c.isbn group by title order by count(*) desc)
-select title from number_of_copies where count=(select max(count) from number_of_copies);
+select title from book_copies where count=(select max(count) from book_copies);
 
 -- 3. Show the titles with five or less copies.
 
-with number_of_copies as
-(select count(*),title from book_detail b
- join book_copy c on b.isbn=c.isbn group by title order by count(*) desc)
-select title from number_of_copies where count<=5;
-
-
+select title from book_copies where count<=5;
 
 -- 4. Show the titles borrowed the most in a given month. (Eg: Sep 2017)
 --- for month feb 2018
