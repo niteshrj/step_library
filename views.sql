@@ -10,7 +10,7 @@ create view bookInfo_between_Jan_feb as
 
 create view isbn_of_selected_book as
   select bc.isbn from book_copy bc right join borrower br on bc.id = br.book_id where
-  return_date <= current_date - interval '4 months' and bc.availablity=true;
+  br.return_date <= current_date - interval '4 months' and bc.availablity=true and bc.available_from<=current_date- interval - '4 months';
 
 create view records_in_march as
   select u.* from user_detail u join borrower b on u.user_id=b.user_id where

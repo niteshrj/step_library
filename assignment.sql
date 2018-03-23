@@ -24,9 +24,6 @@ with s as (select book_id,count(book_id) from borrower where to_char(issue_date,
 select * from book_detail where isbn = (select isbn from book_copy join s on book_copy.id = s.book_id);
 
 -- 5. Show the titles not borrowed for more than four months as of current date.
-
-with isbn_of_selected_book as
-(select bc.isbn from book_copy bc right join borrower br on bc.id = br.book_id where return_date <= current_date - interval '4 months' and bc.availablity=true)
 select bd.title from isbn_of_selected_book iosb join  book_detail bd on iosb.isbn=bd.isbn;
 
 -- 6. Show the titles with more than 10 copies and not borrowed for the last 3 months.

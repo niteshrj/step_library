@@ -63,7 +63,8 @@ ALTER COLUMN title SET NOT NULL;
 CREATE TABLE book_copy(
   id serial,
   ISBN varchar(20),
-  availablity boolean
+  availablity boolean,
+  available_from date
 );
 
 -- Foreign key
