@@ -5,8 +5,7 @@ create view book_copies as
   join book_copy c on b.isbn=c.isbn group by title order by count(*) desc;
 
 create view bookInfo_between_Jan_feb as
-  select book_id,count(book_id) from borrower where issue_date
-  between '02/01/2018' and '02/28/2018'
+  select book_id,count(book_id) from borrower where to_char(issue_date,'MM-YYYY')='02-2018'
   group by book_id order by count desc limit 1;
 
 create view isbn_of_selected_book as
@@ -15,7 +14,7 @@ create view isbn_of_selected_book as
 
 create view records_in_march as
   select u.* from user_detail u join borrower b on u.user_id=b.user_id where
-  b.issue_date between '03/01/2018' and '03/31/2018';
+  to_char(b.issue_date,'MM-YYYY')='03-2018';
 
 create view count_of_borrower as
   select count(*),first_name,last_name from records_in_march
